@@ -1,0 +1,34 @@
+# Intégration continue (fiche 0003) : tests et construction à chaque demande de fusion et sur main.
+# Le job « verifications » est exigé par la règle de main (.github/regles/main.json).
+name: Intégration continue
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Aucune permission par défaut, chaque job demande seulement ce dont il a besoin.
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verifications:
+    name: verifications
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build

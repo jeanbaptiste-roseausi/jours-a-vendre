@@ -13,10 +13,14 @@ HTML, CSS et JavaScript sans framework. Vite pour le serveur de développement e
 - `specs/` : spécifications fonctionnelles validées
 - `decisions/` : fiches de décisions techniques datées
 - `docs/` : documentation
+- `.github/` : intégration continue, publication, Dependabot, description de la règle de `main`
+- `.githooks/` : hook avant commit
+
+En ligne : https://jeanbaptiste-roseausi.github.io/jours-a-vendre/ (publiée à chaque fusion sur `main`).
 
 ## Commandes
 
-- `npm install` : installer les outils
+- `npm install` : installer les outils et activer le hook avant commit
 - `npm run dev` : lancer la page en local (http://localhost:5173)
 - `npm test` : lancer les tests
 - `npm run build` : construire la version publiable dans `dist/`
@@ -35,8 +39,21 @@ Pour chaque fonctionnalité, sur sa propre branche :
 5. **recetteur** (sous-agent) : rejoue le scénario de bout en bout dans le navigateur et rend un rapport d'écarts.
    → **Porte 4 : recette validée par le responsable.**
 6. Demande de fusion, que seul le responsable fusionne.
+   → **Intégration continue au vert** (job `verifications`), exigée par la règle de `main`. Ensuite, la publication en ligne est automatique.
 
 Aucune porte ne se franchit sans la précédente. Les verrous des agents sont dans `.claude/hooks/`, leur preuve dans `tests/outillage/` (voir `decisions/0002-chaine-agents.md`).
+
+## Automatismes
+
+Voir `decisions/0003-automatismes.md`.
+
+- **Hook avant commit** : `npm test` doit passer, sinon le commit est refusé. Ne jamais le sauter (`--no-verify`) sans l'accord du responsable.
+- **Tests rouges et commits** : les tests écrits par le testeur ne sont pas commités tant qu'ils échouent. Une fois le code au vert, on commite les tests, puis le code, et les deux passent le hook. Pour prouver que les tests ont précédé le code, le rapport du testeur, avec ses tests en échec, est recopié dans la description de la demande de fusion.
+- **Règle de `main`, sans exception** : ni poussée directe, ni réécriture de l'historique, ni suppression. Toute modification passe par une demande de fusion avec `verifications` au vert.
+- **Demandes de fusion sensibles** : toute demande de fusion qui touche `.github/`, `.claude/` ou `tests/outillage/` le signale en tête de sa description, avec la liste des fichiers concernés.
+- **Fusion** : `gh pr merge` demande toujours l'autorisation du responsable, même en mode auto (`.claude/settings.json`). Ne jamais fusionner par une autre voie.
+- **Workflows** : actions figées par leur empreinte complète, `permissions: {}` par défaut, et seulement les permissions nécessaires par job.
+- **Dependabot** : ses demandes de fusion suivent la même porte. Playwright MCP, qu'il ne surveille pas, se vérifie à la main.
 
 ## Règles
 
