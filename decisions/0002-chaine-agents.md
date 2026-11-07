@@ -26,7 +26,7 @@ Un skill et trois sous-agents, définis dans `.claude/` et rédigés en françai
 
 Les consignes écrites ne suffisent pas. Chaque agent qui pourrait écrire a donc un verrou, c'est-à-dire un hook qui s'exécute avant chacun de ses outils :
 
-- `hooks/verrou-testeur.mjs` : écriture seulement dans `tests/`. Pour le terminal, Bash et PowerShell compris, seulement `npm test`. Le reste est bloqué.
+- `hooks/verrou-testeur.mjs` : écriture seulement dans `tests/`. Pour le terminal, Bash et PowerShell compris, seulement `npm test`. Il autorise aussi `SubagentHandback`, par son nom exact, pour que le testeur puisse rendre son rapport. Le reste est bloqué.
 - `hooks/verrou-recetteur.mjs` : il refuse l'envoi de fichiers du disque vers une page, le code exécuté hors de la page, l'enregistrement de session, les traces et les vidéos. Il refuse aussi tout nom de fichier explicite, car Playwright MCP enregistre un fichier nommé à la racine du projet et non dans `recettes/`. Ces outils sont aussi retirés de la fiche de l'agent (`disallowedTools`). Il autorise en revanche `SubagentHandback`, par son nom exact, pour que le recetteur puisse rendre son rapport à la session principale. Sans lui, deux recettes ont été perdues le 7 novembre 2026.
 
 **Sûrs en cas de panne** : les deux verrous sont appelés en forme exécutable (`command: node` et `args` avec `${CLAUDE_PROJECT_DIR}`, sans passer par un shell) avec `onFailure: block` (Claude Code 2.1.295 ou plus). Un verrou qui ne démarre pas, plante, dépasse son délai ou rend une sortie invalide bloque l'outil au lieu de le laisser passer.
