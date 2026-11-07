@@ -137,6 +137,19 @@ describe('Porte de fusion', () => {
   });
 });
 
+describe('Fusion soumise à l’accord du responsable', () => {
+  it('gh pr merge demande toujours une autorisation, en Bash comme en PowerShell', () => {
+    const reglages = JSON.parse(lire('.claude/settings.json'));
+    const demander = reglages.permissions.ask;
+    for (const terminal of ['Bash', 'PowerShell']) {
+      expect(demander).toContain(`${terminal}(gh pr merge)`);
+      expect(demander).toContain(`${terminal}(gh pr merge *)`);
+    }
+    const autoriser = reglages.permissions.allow ?? [];
+    expect(autoriser.filter((r) => r.includes('gh pr merge'))).toEqual([]);
+  });
+});
+
 describe('Dependabot', () => {
   it('surveille npm et les actions GitHub chaque semaine', () => {
     const texte = lire('.github/dependabot.yml');
