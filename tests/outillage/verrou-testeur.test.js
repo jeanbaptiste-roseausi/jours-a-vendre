@@ -8,6 +8,8 @@ const SCRIPT = fileURLToPath(new URL('../../.claude/hooks/verrou-testeur.mjs', i
 
 const ecrire = (chemin) => ({ tool_name: 'Write', tool_input: { file_path: chemin, content: 'x' } });
 const terminal = (outil, commande) => ({ tool_name: outil, tool_input: { command: commande } });
+// Outil par lequel un sous-agent rend son rapport. Sans lui, le rapport du testeur se perd.
+const RAPPORT = { tool_name: 'SubagentHandback', tool_input: { message: 'Tests en échec : 3.' } };
 
 describe('Verrou du testeur : ce qui passe', () => {
   it.each([
@@ -19,6 +21,7 @@ describe('Verrou du testeur : ce qui passe', () => {
     ['npm test par Bash', terminal('Bash', 'npm test')],
     ['npm test par PowerShell', terminal('PowerShell', 'npm test')],
     ['npm test avec un fichier ciblé', terminal('Bash', 'npm test -- tests/accueil.test.js')],
+    ['rendre son rapport à la session principale', RAPPORT],
   ])('%s', (_cas, entree) => {
     expect(decider(entree).autorise).toBe(true);
   });
@@ -42,6 +45,13 @@ describe('Verrou du testeur : ce qui est bloqué', () => {
     ['variable PowerShell', terminal('PowerShell', 'npm test -- $env:X')],
     ['autre commande npm', terminal('Bash', 'npm install malveillant')],
     ['outil non prévu', { tool_name: 'WebFetch', tool_input: { url: 'https://exemple.fr' } }],
+    ['message à un autre agent', { tool_name: 'SendMessage', tool_input: { to: 'main', message: 'x' } }],
+    ['lancement d’un autre agent', { tool_name: 'Agent', tool_input: { prompt: 'x' } }],
+    ['nom proche de l’outil de rapport', { tool_name: 'SubagentHandbackX', tool_input: {} }],
+    ['outil de rapport d’un serveur tiers', { tool_name: 'mcp__autre__SubagentHandback', tool_input: {} }],
+    ['outil de rapport en casse différente', { tool_name: 'subagenthandback', tool_input: {} }],
+    ['outil de rapport suivi d’une espace', { tool_name: 'SubagentHandback ', tool_input: {} }],
+    ['outil de rapport tronqué', { tool_name: 'SubagentHand', tool_input: {} }],
   ])('%s', (_cas, entree) => {
     const decision = decider(entree);
     expect(decision.autorise).toBe(false);
@@ -61,6 +71,14 @@ describe('Verrou du testeur : comportement réel du script', () => {
 
   it('laisse passer une écriture dans tests/ avec le code 0', () => {
     expect(lancer(ecrire('tests/calcul.test.js')).status).toBe(0);
+  });
+
+  it('laisse passer le rendu du rapport avec le code 0', () => {
+    expect(lancer(RAPPORT).status).toBe(0);
+  });
+
+  it('bloque un nom voisin de l’outil de rapport avec le code 2', () => {
+    expect(lancer({ tool_name: 'SubagentHandbackX', tool_input: {} }).status).toBe(2);
   });
 
   it('bloque une entrée illisible', () => {

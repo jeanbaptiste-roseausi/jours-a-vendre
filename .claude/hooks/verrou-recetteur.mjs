@@ -7,6 +7,8 @@
 //
 // Règles :
 // - lectures (Read, Grep, Glob) : autorisées ;
+// - rendu du rapport à la session principale (SubagentHandback, nom exact) : autorisé.
+//   Sans lui, le recetteur ne peut pas rendre son rapport et la recette se perd ;
 // - outils Playwright : autorisés, sauf ceux de la liste OUTILS_INTERDITS
 //   et sauf s'ils reçoivent un nom de fichier ;
 // - tout autre outil : bloqué.
@@ -16,6 +18,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const LECTURES = new Set(['Read', 'Grep', 'Glob']);
+const RAPPORT = 'SubagentHandback';
 const PREFIXE_PLAYWRIGHT = 'mcp__playwright__';
 
 // Outils qui lisent un fichier du disque, exécutent du code hors de la page
@@ -46,6 +49,7 @@ export function decider(entree) {
   const parametres = entree?.tool_input ?? {};
 
   if (LECTURES.has(outil)) return autoriser();
+  if (outil === RAPPORT) return autoriser();
 
   if (outil.startsWith(PREFIXE_PLAYWRIGHT)) {
     if (OUTILS_INTERDITS.includes(outil)) {

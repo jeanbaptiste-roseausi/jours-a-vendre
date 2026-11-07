@@ -2,6 +2,8 @@
 //
 // Règles :
 // - lectures (Read, Grep, Glob) : autorisées ;
+// - rendu du rapport à la session principale (SubagentHandback, nom exact) : autorisé.
+//   Sans lui, le testeur ne peut pas rendre son rapport et il se perd ;
 // - écritures (Write, Edit, NotebookEdit) : autorisées seulement dans tests/ ;
 // - terminal (Bash, PowerShell) : seule la commande « npm test » est autorisée,
 //   éventuellement suivie de « -- <arguments> » simples ;
@@ -19,6 +21,7 @@ const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 
 const DOSSIER_TESTS = path.join(RACINE, 'tests');
 
 const LECTURES = new Set(['Read', 'Grep', 'Glob']);
+const RAPPORT = 'SubagentHandback';
 const ECRITURES = new Set(['Write', 'Edit', 'NotebookEdit']);
 const TERMINAUX = new Set(['Bash', 'PowerShell']);
 
@@ -46,6 +49,7 @@ export function decider(entree) {
   const parametres = entree?.tool_input ?? {};
 
   if (LECTURES.has(outil)) return autoriser();
+  if (outil === RAPPORT) return autoriser();
 
   if (ECRITURES.has(outil)) {
     const chemin = parametres.file_path ?? parametres.notebook_path;
