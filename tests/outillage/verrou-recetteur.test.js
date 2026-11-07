@@ -37,6 +37,9 @@ describe('Verrou du recetteur : ce qui est bloqué', () => {
     ['lancement d’un autre agent', { tool_name: 'Agent', tool_input: { prompt: 'x' } }],
     ['nom proche de l’outil de rapport', { tool_name: 'SubagentHandbackX', tool_input: {} }],
     ['outil de rapport d’un serveur tiers', { tool_name: 'mcp__autre__SubagentHandback', tool_input: {} }],
+    ['outil de rapport en casse différente', { tool_name: 'subagenthandback', tool_input: {} }],
+    ['outil de rapport suivi d’une espace', { tool_name: 'SubagentHandback ', tool_input: {} }],
+    ['outil de rapport tronqué', { tool_name: 'SubagentHand', tool_input: {} }],
   ])('%s', (_cas, entree) => {
     expect(decider(entree).autorise).toBe(false);
   });
@@ -56,5 +59,9 @@ describe('Verrou du recetteur : comportement réel du script', () => {
 
   it('laisse passer le rendu du rapport avec le code 0', () => {
     expect(lancer(RAPPORT).status).toBe(0);
+  });
+
+  it('bloque un nom voisin de l’outil de rapport avec le code 2', () => {
+    expect(lancer({ tool_name: 'SubagentHandbackX', tool_input: {} }).status).toBe(2);
   });
 });
