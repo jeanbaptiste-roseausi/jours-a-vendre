@@ -1,14 +1,19 @@
-# Mises à jour hebdomadaires (fiche 0003). Les correctifs de sécurité, eux, arrivent dès leur publication.
+# Mises à jour hebdomadaires (fiche 0003), avec 14 jours d'attente après chaque nouvelle version.
+# Les correctifs de sécurité, eux, arrivent dès leur publication.
 # Chaque mise à jour passe par une demande de fusion et l'intégration continue, comme le reste.
 version: 2
 updates:
   - package-ecosystem: "npm"
+    cooldown:
+      default-days: 14
     directory: "/"
     schedule:
       interval: "weekly"
     commit-message:
       prefix: "Dépendances"
   - package-ecosystem: "github-actions"
+    cooldown:
+      default-days: 14
     directory: "/"
     schedule:
       interval: "weekly"

@@ -12,13 +12,21 @@ describe('Hook avant commit', () => {
   it('existe et lance npm test', () => {
     expect(existsSync(RACINE + '.githooks/pre-commit')).toBe(true);
     const hook = lire('.githooks/pre-commit');
-    expect(hook.startsWith('#!/bin/sh')).toBe(true);
-    expect(hook).toMatch(/^\s*npm test\b/m);
+    expect(hook.startsWith('#!/bin/sh\n')).toBe(true);
+    expect(hook).not.toContain('\r');
+    expect(hook).toMatch(/^\s*npm test \|\| \{/m);
+    expect(hook).toMatch(/^\s*exit 1$/m);
+    expect(hook).not.toMatch(/npm test\s*(\|\|\s*(true|exit 0)|;)/);
   });
 
-  it("est activé par npm install (script prepare)", () => {
+  it('garde des fins de ligne Unix une fois extrait', () => {
+    expect(lire('.gitattributes')).toMatch(/^\.githooks\/\* text eol=lf$/m);
+  });
+
+  it("est activé par npm install (script prepare), y compris sous Windows", () => {
     const paquet = JSON.parse(lire('package.json'));
-    expect(paquet.scripts.prepare).toContain('git config core.hooksPath .githooks');
+    // « exit 0 » fonctionne en sh comme sous cmd.exe, qui ne connaît pas « true ».
+    expect(paquet.scripts.prepare).toBe('git config core.hooksPath .githooks || exit 0');
   });
 
   it("n'ajoute aucune dépendance", () => {
@@ -52,7 +60,30 @@ describe('Workflows', () => {
   it.each(WORKFLOWS)("%s prend la version de Node dans .nvmrc et ne garde pas l'accès git", (chemin) => {
     const texte = lire(chemin);
     expect(texte).toContain('node-version-file: .nvmrc');
-    expect(texte).toContain('persist-credentials: false');
+    const checkouts = texte.match(/uses:\s*actions\/checkout@/g) ?? [];
+    const sansJeton = texte.match(/persist-credentials:\s*false/g) ?? [];
+    expect(checkouts.length).toBeGreaterThan(0);
+    expect(sansJeton).toHaveLength(checkouts.length);
+  });
+
+  it.each(WORKFLOWS)("%s n'utilise aucun déclencheur à privilèges", (chemin) => {
+    expect(lire(chemin)).not.toMatch(/pull_request_target|workflow_run/);
+  });
+
+  it("l'intégration continue ne demande aucune écriture", () => {
+    const ci = lire('.github/workflows/ci.yml');
+    expect(ci).not.toMatch(/:\s*write\b|write-all/);
+    expect(ci).toMatch(/^\s*contents: read$/m);
+  });
+
+  it('la publication ne donne les droits d’écriture qu’au job de déploiement', () => {
+    const pub = lire('.github/workflows/publication.yml');
+    expect(pub).not.toMatch(/write-all/);
+    const debutDeploiement = pub.search(/^\s*deploiement:/m);
+    expect(debutDeploiement).toBeGreaterThan(-1);
+    const ecritures = [...pub.matchAll(/^\s*([\w-]+):\s*write\b/gm)];
+    expect(ecritures.map((m) => m[1]).sort()).toEqual(['id-token', 'pages']);
+    for (const m of ecritures) expect(m.index).toBeGreaterThan(debutDeploiement);
   });
 
   it("l'intégration continue tourne sur les demandes de fusion et sur main", () => {
@@ -113,5 +144,9 @@ describe('Dependabot', () => {
       expect(texte).toMatch(new RegExp(`package-ecosystem:\\s*"?${ecosysteme}"?`));
     }
     expect(texte.match(/interval:\s*"?weekly"?/g)).toHaveLength(2);
+  });
+
+  it('attend 14 jours avant de proposer une nouvelle version', () => {
+    expect(lire('.github/dependabot.yml').match(/cooldown:\s*\n\s*default-days:\s*14\b/g)).toHaveLength(2);
   });
 });
