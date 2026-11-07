@@ -29,10 +29,14 @@ describe('Hook avant commit', () => {
     expect(paquet.scripts.prepare).toBe('git config core.hooksPath .githooks || exit 0');
   });
 
-  it("n'ajoute aucune dépendance", () => {
+  it("n'ajoute que les dépendances décidées (fiches 0001 et 0004)", () => {
     const paquet = JSON.parse(lire('package.json'));
     expect(paquet.dependencies).toBeUndefined();
-    expect(Object.keys(paquet.devDependencies).sort()).toEqual(['vite', 'vitest']);
+    expect(Object.keys(paquet.devDependencies).sort()).toEqual(['jsdom', 'vite', 'vitest']);
+    // Versions exactes, sans ^ ni ~ (fiche 0001).
+    for (const version of Object.values(paquet.devDependencies)) {
+      expect(version).toMatch(/^\d+\.\d+\.\d+$/);
+    }
   });
 });
 
