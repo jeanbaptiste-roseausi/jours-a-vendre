@@ -34,11 +34,13 @@ La chaîne d'agents (fiche 0002) fixe qui fait quoi. Mais rien n'empêchait un c
 - La publication se fait sur GitHub Pages, configuré en mode « workflow ».
 - `vite.config.js` place l'appli dans le sous-dossier `/jours-a-vendre/` pour la construction seulement. En local, `npm run dev` reste à la racine.
 - Adresse : https://jeanbaptiste-roseausi.github.io/jours-a-vendre/
+- L'environnement `github-pages` n'accepte que la branche `main`. Une autre branche ne peut donc pas publier, même avec un workflow modifié.
 
 ### Gardien de la chaîne
 - Dependabot :
   - alertes de vulnérabilités et correctifs de sécurité automatiques ;
-  - `.github/dependabot.yml` : mises à jour hebdomadaires de npm et des actions GitHub, y compris les empreintes figées.
+  - `.github/dependabot.yml` : mises à jour hebdomadaires de npm et des actions GitHub, y compris les empreintes figées ;
+  - **14 jours d'attente** (`cooldown`) avant de proposer une nouvelle version. C'est la même règle que pour le choix des versions, car les paquets piégés sont souvent retirés en quelques jours. Les correctifs de sécurité ne sont pas concernés par ce délai.
 - Détection de secrets avec blocage à l'envoi, déjà active sur ce dépôt public.
 - CodeQL en configuration par défaut.
 
@@ -60,6 +62,8 @@ La chaîne d'agents (fiche 0002) fixe qui fait quoi. Mais rien n'empêchait un c
 ## Limites connues
 
 - **Contourner le hook.** `git commit --no-verify` saute le hook. Le filet est l'intégration continue, exigée par la règle de `main`.
+- **Check modifiable par la branche.** Lors d'une demande de fusion, GitHub exécute le `ci.yml` de la branche elle-même. Une branche qui affaiblit ce workflow, ou les tests de conformité, peut donc obtenir un `verifications` vert. Le contrôle reste la relecture : le relecteur sécurité doit signaler tout changement dans `.github/`, `.githooks/`, `.claude/` ou `tests/outillage/`, et la demande de fusion doit le mentionner en tête.
+- **Fusion par la session.** La règle ne vérifie pas qui fusionne. La session Claude utilise les identifiants du responsable : `gh pr merge` fusionnerait sans lui. La règle « seul le responsable fusionne » repose donc sur la consigne de `CLAUDE.md`, et non sur un blocage technique. La fusion automatique est permise à la demande du responsable, et elle ne s'enclenche que si quelqu'un l'active.
 - **Réglages hors du dépôt.** La règle, Pages, Dependabot et CodeQL se règlent sur GitHub et non dans des fichiers. `.github/regles/main.json` décrit la règle, mais une modification faite sur le site ne s'y reporterait pas.
 - **Playwright MCP non surveillé.** Dependabot ne voit pas cette dépendance, figée à la version 0.0.83 dans la fiche du recetteur (`.claude/agents/recetteur.md`) et absente de `package.json`. Ses mises à jour et ses alertes de sécurité restent à vérifier à la main.
 - **Auteur des tests.** Les tests de conformité de l'outillage sont écrits par la session principale : le testeur exige une spécification validée et reste réservé aux fonctionnalités.
