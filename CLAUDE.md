@@ -21,6 +21,23 @@ HTML, CSS et JavaScript sans framework. Vite pour le serveur de développement e
 - `npm test` : lancer les tests
 - `npm run build` : construire la version publiable dans `dist/`
 
+## Chaîne de travail
+
+Pour chaque fonctionnalité, sur sa propre branche :
+
+1. **`/cadrer`** (skill, lancé par le responsable) : questions, puis spécification dans `specs/`.
+   → **Porte 1 : spécification validée par le responsable.**
+2. **testeur** (sous-agent) : écrit les tests depuis les critères d'acceptation et vérifie qu'ils échouent.
+3. **Session principale** : écrit le code jusqu'à ce que les tests passent, sans modifier les tests.
+   → **Porte 2 : tests au vert** (`npm test`).
+4. **relecteur-securite** (sous-agent) : relit le diff et rend un rapport. La session principale corrige.
+   → **Porte 3 : relecture traitée** (aucun point critique ou haut restant).
+5. **recetteur** (sous-agent) : rejoue le scénario de bout en bout dans le navigateur et rend un rapport d'écarts.
+   → **Porte 4 : recette validée par le responsable.**
+6. Demande de fusion, que seul le responsable fusionne.
+
+Aucune porte ne se franchit sans la précédente. Les verrous des agents sont dans `.claude/hooks/`, leur preuve dans `tests/outillage/` (voir `decisions/0002-chaine-agents.md`).
+
 ## Règles
 
 1. Interface, documentation, commentaires et messages de commit en français.
