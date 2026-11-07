@@ -29,6 +29,8 @@ Les consignes écrites ne suffisent pas. Chaque agent qui pourrait écrire a don
 - `hooks/verrou-testeur.mjs` : écriture seulement dans `tests/`. Pour le terminal, Bash et PowerShell compris, seulement `npm test`. Le reste est bloqué.
 - `hooks/verrou-recetteur.mjs` : il refuse l'envoi de fichiers du disque vers une page, le code exécuté hors de la page, l'enregistrement de session, les traces et les vidéos. Il refuse aussi tout nom de fichier explicite, car Playwright MCP enregistre un fichier nommé à la racine du projet et non dans `recettes/`. Ces outils sont aussi retirés de la fiche de l'agent (`disallowedTools`).
 
+**Sûrs en cas de panne** : les deux verrous sont appelés en forme exécutable (`command: node` et `args` avec `${CLAUDE_PROJECT_DIR}`, sans passer par un shell) avec `onFailure: block` (Claude Code 2.1.295 ou plus). Un verrou qui ne démarre pas, plante, dépasse son délai ou rend une sortie invalide bloque l'outil au lieu de le laisser passer.
+
 Leur preuve est rejouée à chaque `npm test` (`tests/outillage/`). Le script est aussi lancé tel quel, pour vérifier le code de sortie qui bloque réellement l'outil.
 
 ### Nouvelle dépendance : Playwright MCP

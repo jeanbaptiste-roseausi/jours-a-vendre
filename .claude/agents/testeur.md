@@ -9,7 +9,9 @@ hooks:
     - matcher: "*"
       hooks:
         - type: command
-          command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/verrou-testeur.mjs"
+          command: node
+          args: ["${CLAUDE_PROJECT_DIR}/.claude/hooks/verrou-testeur.mjs"]
+          onFailure: block
 ---
 
 # Testeur

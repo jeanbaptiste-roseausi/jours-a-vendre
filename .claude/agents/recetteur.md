@@ -32,7 +32,9 @@ hooks:
     - matcher: "*"
       hooks:
         - type: command
-          command: node "$CLAUDE_PROJECT_DIR/.claude/hooks/verrou-recetteur.mjs"
+          command: node
+          args: ["${CLAUDE_PROJECT_DIR}/.claude/hooks/verrou-recetteur.mjs"]
+          onFailure: block
 ---
 
 # Recetteur
