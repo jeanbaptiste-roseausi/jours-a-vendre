@@ -48,6 +48,7 @@ Aucune porte ne se franchit sans la précédente. Les verrous des agents sont da
 Voir `decisions/0003-automatismes.md`.
 
 - **Hook avant commit** : `npm test` doit passer, sinon le commit est refusé. Ne jamais le sauter (`--no-verify`) sans l'accord du responsable.
+- **Tests rouges et commits** : les tests écrits par le testeur ne sont pas commités tant qu'ils échouent. Une fois le code au vert, on commite les tests, puis le code, et les deux passent le hook. Pour prouver que les tests ont précédé le code, le rapport du testeur, avec ses tests en échec, est recopié dans la description de la demande de fusion.
 - **Règle de `main`, sans exception** : ni poussée directe, ni réécriture de l'historique, ni suppression. Toute modification passe par une demande de fusion avec `verifications` au vert.
 - **Workflows** : actions figées par leur empreinte complète, `permissions: {}` par défaut, et seulement les permissions nécessaires par job.
 - **Dependabot** : ses demandes de fusion suivent la même porte. Playwright MCP, qu'il ne surveille pas, se vérifie à la main.

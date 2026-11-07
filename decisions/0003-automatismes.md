@@ -13,6 +13,7 @@ La chaîne d'agents (fiche 0002) fixe qui fait quoi. Mais rien n'empêchait un c
 - `.githooks/pre-commit` lance `npm test` et refuse le commit en cas d'échec. Le hook teste les fichiers du dossier de travail, et non seulement ceux qui sont prêts à être commités.
 - Le script `prepare` de `package.json` (`git config core.hooksPath .githooks`) l'active à chaque `npm install` ou `npm ci`. Aucune dépendance n'est ajoutée.
 - `.gitattributes` impose des fins de ligne Unix dans `.githooks/`, sinon le script ne se lancerait pas une fois extrait sous Windows.
+- **Tests rouges, décision du responsable.** Le testeur écrit des tests qui doivent échouer, et le hook refuserait de les commiter seuls. Sans contournement, ils restent donc non commités jusqu'à ce que le code les fasse passer. On commite alors les tests, puis le code. Le rapport du testeur, avec ses tests en échec, est recopié dans la description de la demande de fusion pour prouver que les tests ont précédé le code.
 
 ### Intégration continue
 - `.github/workflows/ci.yml` tourne à chaque demande de fusion et à chaque poussée sur `main`. Le job `verifications` enchaîne `npm ci`, `npm test` et `npm run build`.
