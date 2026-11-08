@@ -9,6 +9,76 @@
   <body>
     <main>
       <h1>Combien de jours dois-je vendre ?</h1>
+
+      <form id="calculateur" novalidate>
+        <div class="champ">
+          <label for="charges">Charges annuelles (€ HT)</label>
+          <p class="aide" id="charges-aide">Tout ce que vous devez encaisser sur l'année, rémunération comprise.</p>
+          <input id="charges" name="charges" type="text" inputmode="decimal" autocomplete="off" aria-describedby="charges-aide charges-erreur" />
+          <p class="erreur" id="charges-erreur" role="alert"></p>
+        </div>
+
+        <div class="champ">
+          <label for="chiffre-affaires">Chiffre d'affaires déjà identifié (€ HT)</label>
+          <p class="aide" id="chiffre-affaires-aide">Missions signées ou facturées. Laissez vide si aucune.</p>
+          <input id="chiffre-affaires" name="chiffre-affaires" type="text" inputmode="decimal" autocomplete="off" aria-describedby="chiffre-affaires-aide chiffre-affaires-erreur" />
+          <p class="erreur" id="chiffre-affaires-erreur" role="alert"></p>
+        </div>
+
+        <div class="champ">
+          <label for="tarif">Tarif</label>
+          <select id="tarif" name="tarif">
+            <option value="jour" selected>par jour</option>
+            <option value="heure">par heure</option>
+          </select>
+        </div>
+
+        <div id="groupe-jour">
+          <div class="champ">
+            <label for="tjm">TJM (€ HT)</label>
+            <p class="aide" id="tjm-aide">Taux journalier moyen facturé à vos clients.</p>
+            <input id="tjm" name="tjm" type="text" inputmode="decimal" autocomplete="off" aria-describedby="tjm-aide tjm-erreur" />
+            <p class="erreur" id="tjm-erreur" role="alert"></p>
+          </div>
+        </div>
+
+        <div id="groupe-heure" hidden>
+          <div class="champ">
+            <label for="taux-horaire">Taux horaire (€ HT)</label>
+            <p class="aide" id="taux-horaire-aide">Prix d'une heure facturée à vos clients.</p>
+            <input id="taux-horaire" name="taux-horaire" type="text" inputmode="decimal" autocomplete="off" aria-describedby="taux-horaire-aide taux-horaire-erreur" />
+            <p class="erreur" id="taux-horaire-erreur" role="alert"></p>
+          </div>
+
+          <div class="champ">
+            <label for="heures">Heures travaillées par jour</label>
+            <p class="aide" id="heures-aide">Nombre d'heures facturées dans une journée, de 1 à 24.</p>
+            <input id="heures" name="heures" type="text" inputmode="decimal" autocomplete="off" aria-describedby="heures-aide heures-erreur" />
+            <p class="erreur" id="heures-erreur" role="alert"></p>
+          </div>
+        </div>
+
+        <div class="champ">
+          <label for="mois">Mois restants</label>
+          <p class="aide" id="mois-aide">Nombre de mois pour vendre ces jours, de 1 à 12.</p>
+          <input id="mois" name="mois" type="text" inputmode="numeric" autocomplete="off" aria-describedby="mois-aide mois-erreur" />
+          <p class="erreur" id="mois-erreur" role="alert"></p>
+        </div>
+
+        <button type="submit">Calculer</button>
+      </form>
+
+      <section id="resultats" role="region" aria-label="Résultats" aria-live="polite" hidden>
+        <dl>
+          <dt>Montant restant à couvrir</dt>
+          <dd id="resultat-montant"></dd>
+          <dt>Jours restant à vendre</dt>
+          <dd id="resultat-jours"></dd>
+          <dt>Rythme mensuel</dt>
+          <dd id="resultat-rythme"></dd>
+        </dl>
+        <p id="resultat-couvertes"></p>
+      </section>
     </main>
   </body>
 </html>
