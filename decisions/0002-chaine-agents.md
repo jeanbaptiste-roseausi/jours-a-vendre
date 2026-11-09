@@ -13,7 +13,7 @@ Un skill et trois sous-agents, définis dans `.claude/` et rédigés en françai
 
 | Rôle | Fichier | Modèle, effort | Peut écrire ? |
 |---|---|---|---|
-| Cadrage | `skills/cadrer/SKILL.md` | celui de la session, effort élevé | seulement la spécification, avec l'accord du responsable |
+| Cadrage | `skills/cadrer/SKILL.md` | celui de la session, effort élevé | seulement dans `specs/` : sans demande pendant le tour qui lance le skill, avec l'accord du responsable au-delà |
 | Testeur | `agents/testeur.md` | Sonnet, effort élevé | seulement `tests/` (verrou) |
 | Relecteur sécurité | `agents/relecteur-securite.md` | Opus, effort élevé | non (Read, Grep, Glob) |
 | Recetteur | `agents/recetteur.md` | Sonnet, effort moyen | non. Seul le serveur Playwright écrit les captures dans `recettes/` |
