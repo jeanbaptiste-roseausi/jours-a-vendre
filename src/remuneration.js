@@ -3,7 +3,9 @@
 //
 // Précision : les saisies ont au plus 2 décimales. Les calculs se font donc sur des
 // fractions d'entiers exactes, et les arrondis seulement sur les résultats (règle 3).
-// Une division qui tombe juste n'est ainsi jamais arrondie (règle 4).
+// Une division qui tombe juste n'est ainsi jamais arrondie (règle 4). Cette exactitude
+// vaut pour des montants réalistes : au-delà de milliers de milliards d'euros, la saisie
+// lue comme un nombre JavaScript peut déjà s'écarter d'un centime (cas non traité).
 import { MESSAGES, analyserNombre, nombreDeDecimales, sansEspaces } from './calcul.js';
 
 export const MESSAGES_REMUNERATION = {
