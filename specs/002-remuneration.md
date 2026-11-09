@@ -1,6 +1,6 @@
 # 002 – Rémunération et trésorerie
 
-- **Statut** : à valider
+- **Statut** : validée
 - **Date** : 2026-11-09
 
 ## Note de cadrage
@@ -20,7 +20,7 @@
 
 ## Où on en est
 
-- **Étape** : temps 2 terminé, spécification à valider par le responsable (note validée le 2026-11-09).
+- **Étape** : spécification validée par le responsable le 2026-11-09.
 
 ## Objectif
 
@@ -101,7 +101,7 @@ Dans toutes les règles, « taux » est le taux de prélèvements divisé par 10
 
 **D – Combien de temps je tiens**
 
-17. Sortie mensuelle = rémunération nette mensuelle × (1 + taux) + frais du mois.
+17. Sortie mensuelle = rémunération nette mensuelle × (1 + taux) + frais du mois, affichée au centime supérieur. Une division qui tombe juste n'est pas arrondie.
 18. Durée = trésorerie ÷ sortie mensuelle non arrondie, arrondie à une décimale inférieure. La réserve n'intervient pas : D utilise toute la trésorerie.
 
 ## Cas d'erreur
@@ -210,6 +210,7 @@ Tous les chiffres sont fictifs. Le taux est à 45 % sauf mention contraire.
 | Trésorerie 29 000 ; net 2 000 ; frais vide | Sortie mensuelle 2 900 € ; 10 mois | Division juste. |
 | Trésorerie 0 ; net 2 000 ; frais vide | Sortie mensuelle 2 900 € ; 0 mois | Cas limite. |
 | Trésorerie 30 000 ; net 3 000 ; frais 6 000 par an | Sortie mensuelle 4 850 € ; 6,1 mois | Frais annuels ramenés au mois. |
+| Trésorerie 30 000 ; net 3 000 ; frais 1 000 par an | Sortie mensuelle 4 433,34 € ; 6,7 mois | Sortie exacte 4 433,3333 → 4 433,34 à l'affichage. La durée part du montant exact : 30 000 ÷ 4 433,3333 = 6,7669 → 6,7. |
 
 ### Erreurs
 
@@ -244,6 +245,7 @@ Tous les chiffres sont fictifs. Le taux est à 45 % sauf mention contraire.
 - CA19 – Les valeurs saisies sont gardées en changeant d'onglet, de calcul ou de mode, et les résultats sont effacés.
 - CA20 – Après un rechargement, l'onglet « Jours à vendre » est actif, les champs sont vides, le taux est à 45 et le sélecteur sur « Combien me verser ».
 - CA21 – Les tests de la spécification 001 restent au vert sans être modifiés.
+- CA22 – D : la sortie mensuelle s'affiche au centime supérieur, et la durée se calcule sur le montant exact : trésorerie 30 000, net 3 000 et frais 1 000 par an donnent « 4 433,34 € » et « 6,7 mois ».
 
 ## Scénario de bout en bout
 
@@ -263,4 +265,4 @@ Tous les chiffres sont fictifs. Le taux est à 45 % sauf mention contraire.
 
 ## Questions ouvertes
 
-1. **Arrondi de la sortie mensuelle affichée dans D** : quand elle ne tombe pas juste (par exemple des frais annuels de 1 000 €, soit 83,33… € par mois), faut-il l'arrondir au centime supérieur, inférieur ou le plus proche ? Cela ne change que l'affichage : la durée se calcule sur le montant exact. Proposition : centime supérieur, car c'est une sortie et il vaut mieux la montrer par excès.
+Aucune.
