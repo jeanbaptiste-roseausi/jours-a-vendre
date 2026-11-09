@@ -125,6 +125,7 @@ Une règle commune, à la finesse du risque faible : un seul message par champ, 
 - Jours par mois supérieurs aux jours réels du mois ou à la capacité de travail : déjà exclu de la 001, sans effet sur le calcul.
 - Nette déjà versée incohérente avec la trésorerie : le champ est additionné tel quel, l'utilisateur voit le total.
 - Montants très élevés ou durées très longues : aucun plafond, sans intérêt pour un indépendant réel.
+- Réserve saisie à 0 avec une trésorerie à 0 : aucun intérêt pratique, comportement non spécifié.
 
 ## Affichage
 
@@ -151,6 +152,8 @@ Une règle commune, à la finesse du risque faible : un seul message par champ, 
 | Taux horaire (€ HT) | Prix d'une heure facturée à vos clients, plus de 0 €. |
 | Frais (€ HT) | Dépenses de l'activité, hors rémunération, 0 ou plus. Laissez vide s'il n'y en a pas. |
 | Rémunération nette mensuelle (€) | Ce que vous voulez vous verser chaque mois, plus de 0 €. |
+
+Sélecteurs : « Calcul », « Unité de la réserve » (A), « Tarif » (C) et « Périodicité des frais » (B, C, D).
 
 **Résultats**
 
