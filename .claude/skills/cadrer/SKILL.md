@@ -27,7 +27,7 @@ Pas d'excès de découpage : ces niveaux guident tes questions, ils n'ajoutent p
 
 ## 1. Au lancement
 
-Lis d'abord `CLAUDE.md`, tout `specs/` et tout `decisions/`. Ne pose jamais une question dont la réponse y est déjà écrite. Si une réponse écrite te semble ambiguë ou contredite, signale-le et demande confirmation au lieu de reposer la question.
+Lis d'abord `CLAUDE.md`, tout `specs/`, tout `decisions/` et `docs/interface.md`. Ne pose jamais une question dont la réponse y est déjà écrite. Si une réponse écrite te semble ambiguë ou contredite, signale-le et demande confirmation au lieu de reposer la question.
 
 Puis, dans cet ordre :
 
@@ -99,19 +99,20 @@ Le résultat est une **note de cadrage de 15 lignes au plus**, en tête de la sp
 
 Seulement sur le périmètre validé. Une question hors périmètre se traite comme un changement de la note, à faire valider.
 
-Couvre ces thèmes dans cet ordre, en sautant ce qui est déjà tranché, et selon la profondeur du tableau :
+Couvre ces thèmes dans cet ordre, en sautant ce qui est déjà tranché, et selon la profondeur du tableau. Le thème **Interface** est obligatoire à tous les niveaux de risque :
 1. **Données saisies** : chaque champ, son unité, ses bornes, s'il est obligatoire, sa valeur par défaut.
 2. **Règles de calcul** : formules, arrondis (à quoi, dans quel sens), ordre des opérations.
 3. **Cas limites et d'erreur** : selon la finesse retenue ; message affiché pour chacun.
 4. **Affichage** : ce qui s'affiche, où, dans quel format (séparateurs, unités, décimales).
-5. **Vocabulaire** : les mots exacts de l'interface et leur définition.
-6. **Critères d'acceptation** : les conditions vérifiables qui diront que c'est fini.
+5. **Interface** : la place de chaque élément à l'écran et sa tenue selon les tailles (voir « Questions d'interface » ci-dessous).
+6. **Vocabulaire** : les mots exacts de l'interface et leur définition.
+7. **Critères d'acceptation** : les conditions vérifiables qui diront que c'est fini.
 
 | Risque | Quand | Vagues au plus | Thèmes | Cas limites |
 |---|---|---|---|---|
-| Faible | Une erreur reste visible et sans conséquence | 2 | Données, règles, cas principaux ; 3 exemples chiffrés | Seulement ceux qui fausseraient le résultat ou bloqueraient la page. Une règle commune et un message simple pour les saisies invalides. |
-| Moyen | Une erreur peut fausser une décision | 4 | Les 6 thèmes ; un exemple par règle | Bornes de chaque champ et résultats impossibles, un message par type de faute. |
-| Élevé | Argent réel, données personnelles, action irréversible | sans plafond | Les 6 thèmes ; cas dégradés dans le scénario ; relecture des règles une à une avec le responsable avant rédaction | Combinaisons de fautes, priorité des messages, états intermédiaires, cas dégradés. |
+| Faible | Une erreur reste visible et sans conséquence | 2 | Données, règles, cas principaux, interface ; 3 exemples chiffrés | Seulement ceux qui fausseraient le résultat ou bloqueraient la page. Une règle commune et un message simple pour les saisies invalides. |
+| Moyen | Une erreur peut fausser une décision | 4 | Les 7 thèmes ; un exemple par règle | Bornes de chaque champ et résultats impossibles, un message par type de faute. |
+| Élevé | Argent réel, données personnelles, action irréversible | sans plafond | Les 7 thèmes ; cas dégradés dans le scénario ; relecture des règles une à une avec le responsable avant rédaction | Combinaisons de fautes, priorité des messages, états intermédiaires, cas dégradés. |
 
 **Finesse des cas limites.** Au début du temps 2, propose la finesse du tableau en une seule question. Le responsable peut la monter ou la baisser, pour l'ensemble ou pour un cas précis, sans changer le risque. Note le choix dans « Où on en est ». Tout cas limite repéré et écarté va dans « Cas limites non traités », avec sa raison en une ligne : c'est un choix assumé, pas un oubli, et il ne donne lieu à aucun critère d'acceptation.
 
@@ -119,6 +120,18 @@ Couvre ces thèmes dans cet ordre, en sautant ce qui est déjà tranché, et sel
 - Ne pose une question que si sa réponse change la façon de traiter le problème. Sinon, propose une valeur par défaut, et fais valider ces valeurs en bloc.
 - Un élément sans lien avec le problème est proposé en exclusion (sur-qualité).
 - Un problème qu'aucun critère de réussite ne couvre est signalé (sous-qualité).
+
+### Questions d'interface
+
+Pose-les à chaque fonctionnalité, quel que soit le risque, en une seule vague. Elles comptent dans le nombre de vagues du tableau. Rappelle d'abord au responsable, en deux lignes, les règles de `docs/interface.md`.
+
+1. **Écran et état le plus chargé** : quel écran la fonctionnalité crée ou modifie (nouvel onglet, onglet existant, simple ajout), et que contient-il quand tout est rempli, avec le résultat et le message le plus long ?
+2. **Priorité de lecture** : ce que l'utilisateur doit voir en premier, puis ensuite. Si tout ne tient pas, ce qui peut se replier ou passer dans un autre onglet.
+3. **Téléphone** : même ordre que sur PC, ou un autre.
+4. **Écarts au référentiel** : confirme que chaque règle s'applique. Un écart est une décision du responsable, notée avec sa raison.
+5. **Charte** : si la section « Charte RoseauSI » de `docs/interface.md` est remplie, demande si elle s'applique telle quelle. Si elle est vide, ne pose aucune question de couleur ou de police et note « charte non définie ».
+
+La règle « transformer le flou en mesurable » vaut ici aussi : « aéré », « clair » ou « bien visible » se traduisent en position, taille, nombre d'éléments ou ordre.
 
 ## 5. Rédiger la spécification
 
@@ -148,6 +161,14 @@ Crée `specs/NNN-nom-court.md` (NNN = numéro suivant sur trois chiffres, nom en
 | Situation | Comportement attendu | Message affiché |
 ### Cas limites non traités
 ## Affichage
+## Interface
+- **Écran et état le plus chargé** :
+- **Priorité de lecture** :
+- **Téléphone** :
+- **Écarts à `docs/interface.md`** : aucun, ou décision du responsable et sa raison
+- **Charte** : appliquée, ou charte non définie
+
+| Exigence | Taille d'écran | Comment la vérifier | Critère |
 ## Vocabulaire
 | Terme | Définition |
 ## Exemples chiffrés
@@ -162,12 +183,14 @@ Crée `specs/NNN-nom-court.md` (NNN = numéro suivant sur trois chiffres, nom en
 Règles de rédaction :
 - au moins trois **exemples chiffrés** : un cas courant, un cas limite, un cas d'erreur ; calcule-les toi-même et vérifie-les deux fois ;
 - chaque critère d'acceptation est numéroté (CA1, CA2…) et vérifiable ;
-- le **scénario de bout en bout** décrit pas à pas ce qu'un utilisateur saisit et voit, pour la recette ;
+- le **scénario de bout en bout** décrit pas à pas ce qu'un utilisateur saisit et voit, pour la recette ; il comporte une étape qui amène chaque écran concerné à son état le plus chargé ;
+- chaque règle de `docs/interface.md`, à chaque taille où elle s'applique, devient une ligne du tableau « Interface » avec son critère d'acceptation (CAn), sauf écart décidé par le responsable ;
+- une exigence d'interface donne sa taille d'écran, l'état de la page et un seuil ou une observation sans interprétation ;
 - pendant le cadrage, tout point non tranché reste dans « Où on en est », jamais dans une règle ;
 - au passage à « à valider », les points restants vont dans « Questions ouvertes », et « Où on en est » se réduit à l'étape atteinte.
 
 ## 6. S'arrêter sur une synthèse
 
-Quand le détail est terminé, passe le statut à « à valider ». Termine par une synthèse courte en français : besoin et problème, règles retenues, exemples chiffrés, critères d'acceptation, cas limites non traités, questions ouvertes. Demande au responsable de valider la spécification. **Arrête-toi là.**
+Quand le détail est terminé, passe le statut à « à valider ». Termine par une synthèse courte en français : besoin et problème, règles retenues, exigences d'interface, exemples chiffrés, critères d'acceptation, cas limites non traités, questions ouvertes. Demande au responsable de valider la spécification. **Arrête-toi là.**
 
 Seul le responsable fait passer le statut à « validée ». Tant qu'il ne l'a pas fait, aucun test ni code ne commence (porte 1 de la chaîne de travail, voir `CLAUDE.md`).

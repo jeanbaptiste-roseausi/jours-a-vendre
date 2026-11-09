@@ -15,6 +15,7 @@ describe('Verrou du recetteur : ce qui passe', () => {
     ['remplir un champ', pw('browser_type', { element: 'TJM', ref: 'e3', text: '500' })],
     ['lire la page', pw('browser_snapshot')],
     ['capture nommée par le serveur', pw('browser_take_screenshot')],
+    ['redimensionner la fenêtre', pw('browser_resize', { width: 1366, height: 630 })],
     ['lire la spécification', { tool_name: 'Read', tool_input: { file_path: 'specs/001-calcul.md' } }],
     ['rendre son rapport à la session principale', RAPPORT],
   ])('%s', (_cas, entree) => {
@@ -29,6 +30,7 @@ describe('Verrou du recetteur : ce qui est bloqué', () => {
     ['capture nommée (écrite à la racine du projet)', pw('browser_take_screenshot', { filename: 'capture.png' })],
     ['capture vers src/', pw('browser_take_screenshot', { filename: '../src/x.png' })],
     ['instantané enregistré dans un fichier', pw('browser_snapshot', { filename: 'page.md' })],
+    ['mesure enregistrée dans un fichier', pw('browser_evaluate', { function: '() => 1', filename: 'mesure.json' })],
     ['écriture de fichier', { tool_name: 'Write', tool_input: { file_path: 'recettes/x.md' } }],
     ['modification de fichier', { tool_name: 'Edit', tool_input: { file_path: 'src/main.js' } }],
     ['commande Bash', { tool_name: 'Bash', tool_input: { command: 'ls' } }],
