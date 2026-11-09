@@ -10,6 +10,12 @@
     <main>
       <h1>Combien de jours dois-je vendre ?</h1>
 
+      <div class="onglets" role="tablist" aria-label="Calculateurs">
+        <button type="button" role="tab" id="onglet-jours" aria-controls="panneau-jours" aria-selected="true">Jours à vendre</button>
+        <button type="button" role="tab" id="onglet-remuneration" aria-controls="panneau-remuneration" aria-selected="false">Rémunération</button>
+      </div>
+
+      <div id="panneau-jours" role="tabpanel" aria-labelledby="onglet-jours">
       <form id="calculateur" novalidate>
         <div class="champ">
           <label for="charges">Charges annuelles (€ HT)</label>
@@ -79,6 +85,239 @@
         </dl>
         <p id="resultat-couvertes"></p>
       </section>
+      </div>
+
+      <div id="panneau-remuneration" role="tabpanel" aria-labelledby="onglet-remuneration" hidden>
+        <form id="formulaire-remuneration" novalidate>
+          <div class="champ">
+            <label for="remu-calcul">Calcul</label>
+            <select id="remu-calcul">
+              <option value="a" selected>Combien me verser</option>
+              <option value="b">Quel tarif pratiquer</option>
+              <option value="c">Combien je gagnerais</option>
+              <option value="d">Combien de temps je tiens</option>
+            </select>
+          </div>
+
+          <div class="champ">
+            <label for="remu-taux">Taux de prélèvements (%)</label>
+            <p class="aide" id="remu-taux-aide">Part des prélèvements, comptée sur le net, de 0 à 200 %.</p>
+            <input id="remu-taux" type="text" inputmode="decimal" autocomplete="off" value="45" aria-describedby="remu-taux-aide remu-taux-erreur" />
+            <p class="erreur" id="remu-taux-erreur" role="alert"></p>
+          </div>
+
+          <div data-calcul="a">
+            <div class="champ">
+              <label for="remu-a-tresorerie">Trésorerie disponible (€)</label>
+              <p class="aide" id="remu-a-tresorerie-aide">Ce que vous avez sur le compte aujourd'hui, 0 ou plus.</p>
+              <input id="remu-a-tresorerie" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-a-tresorerie-aide remu-a-tresorerie-erreur" />
+              <p class="erreur" id="remu-a-tresorerie-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-a-reserve">Réserve à garder</label>
+              <p class="aide" id="remu-a-reserve-aide">Un montant, ou de 0 à 100 % de la trésorerie. Laissez vide si aucune.</p>
+              <input id="remu-a-reserve" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-a-reserve-aide remu-a-reserve-erreur" />
+              <p class="erreur" id="remu-a-reserve-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-a-unite-reserve">Unité de la réserve</label>
+              <select id="remu-a-unite-reserve">
+                <option value="euro" selected>en €</option>
+                <option value="pourcent">en %</option>
+              </select>
+            </div>
+
+            <div class="champ">
+              <label for="remu-a-deja">Nette déjà versée (€)</label>
+              <p class="aide" id="remu-a-deja-aide">Rémunération nette déjà versée cette année, 0 ou plus. Laissez vide si aucune.</p>
+              <input id="remu-a-deja" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-a-deja-aide remu-a-deja-erreur" />
+              <p class="erreur" id="remu-a-deja-erreur" role="alert"></p>
+            </div>
+          </div>
+
+          <div data-calcul="b" hidden>
+            <div class="champ">
+              <label for="remu-b-objectif">Objectif de rémunération nette mensuelle (€)</label>
+              <p class="aide" id="remu-b-objectif-aide">Ce que vous voulez toucher par mois, plus de 0 €.</p>
+              <input id="remu-b-objectif" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-b-objectif-aide remu-b-objectif-erreur" />
+              <p class="erreur" id="remu-b-objectif-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-b-jours">Jours facturés par mois</label>
+              <p class="aide" id="remu-b-jours-aide">Nombre de jours facturés dans un mois, de 1 à 31.</p>
+              <input id="remu-b-jours" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-b-jours-aide remu-b-jours-erreur" />
+              <p class="erreur" id="remu-b-jours-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-b-heures">Heures travaillées par jour</label>
+              <p class="aide" id="remu-b-heures-aide">Nombre d'heures facturées dans une journée, de 1 à 24.</p>
+              <input id="remu-b-heures" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-b-heures-aide remu-b-heures-erreur" />
+              <p class="erreur" id="remu-b-heures-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-b-frais">Frais (€ HT)</label>
+              <p class="aide" id="remu-b-frais-aide">Dépenses de l'activité, hors rémunération, 0 ou plus. Laissez vide s'il n'y en a pas.</p>
+              <input id="remu-b-frais" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-b-frais-aide remu-b-frais-erreur" />
+              <p class="erreur" id="remu-b-frais-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-b-periodicite">Périodicité des frais</label>
+              <select id="remu-b-periodicite">
+                <option value="mois" selected>par mois</option>
+                <option value="an">par an</option>
+              </select>
+            </div>
+          </div>
+
+          <div data-calcul="c" hidden>
+            <div class="champ">
+              <label for="remu-c-tarif">Tarif</label>
+              <select id="remu-c-tarif">
+                <option value="jour" selected>par jour</option>
+                <option value="heure">par heure</option>
+              </select>
+            </div>
+
+            <div id="remu-c-groupe-jour">
+              <div class="champ">
+                <label for="remu-c-tjm">TJM (€ HT)</label>
+                <p class="aide" id="remu-c-tjm-aide">Taux journalier moyen facturé à vos clients, plus de 0 €.</p>
+                <input id="remu-c-tjm" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-c-tjm-aide remu-c-tjm-erreur" />
+                <p class="erreur" id="remu-c-tjm-erreur" role="alert"></p>
+              </div>
+            </div>
+
+            <div id="remu-c-groupe-heure" hidden>
+              <div class="champ">
+                <label for="remu-c-taux-horaire">Taux horaire (€ HT)</label>
+                <p class="aide" id="remu-c-taux-horaire-aide">Prix d'une heure facturée à vos clients, plus de 0 €.</p>
+                <input id="remu-c-taux-horaire" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-c-taux-horaire-aide remu-c-taux-horaire-erreur" />
+                <p class="erreur" id="remu-c-taux-horaire-erreur" role="alert"></p>
+              </div>
+
+              <div class="champ">
+                <label for="remu-c-heures">Heures travaillées par jour</label>
+                <p class="aide" id="remu-c-heures-aide">Nombre d'heures facturées dans une journée, de 1 à 24.</p>
+                <input id="remu-c-heures" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-c-heures-aide remu-c-heures-erreur" />
+                <p class="erreur" id="remu-c-heures-erreur" role="alert"></p>
+              </div>
+            </div>
+
+            <div class="champ">
+              <label for="remu-c-jours">Jours facturés par mois</label>
+              <p class="aide" id="remu-c-jours-aide">Nombre de jours facturés dans un mois, de 1 à 31.</p>
+              <input id="remu-c-jours" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-c-jours-aide remu-c-jours-erreur" />
+              <p class="erreur" id="remu-c-jours-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-c-frais">Frais (€ HT)</label>
+              <p class="aide" id="remu-c-frais-aide">Dépenses de l'activité, hors rémunération, 0 ou plus. Laissez vide s'il n'y en a pas.</p>
+              <input id="remu-c-frais" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-c-frais-aide remu-c-frais-erreur" />
+              <p class="erreur" id="remu-c-frais-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-c-periodicite">Périodicité des frais</label>
+              <select id="remu-c-periodicite">
+                <option value="mois" selected>par mois</option>
+                <option value="an">par an</option>
+              </select>
+            </div>
+          </div>
+
+          <div data-calcul="d" hidden>
+            <div class="champ">
+              <label for="remu-d-tresorerie">Trésorerie disponible (€)</label>
+              <p class="aide" id="remu-d-tresorerie-aide">Ce que vous avez sur le compte aujourd'hui, 0 ou plus.</p>
+              <input id="remu-d-tresorerie" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-d-tresorerie-aide remu-d-tresorerie-erreur" />
+              <p class="erreur" id="remu-d-tresorerie-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-d-net">Rémunération nette mensuelle (€)</label>
+              <p class="aide" id="remu-d-net-aide">Ce que vous voulez vous verser chaque mois, plus de 0 €.</p>
+              <input id="remu-d-net" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-d-net-aide remu-d-net-erreur" />
+              <p class="erreur" id="remu-d-net-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-d-frais">Frais (€ HT)</label>
+              <p class="aide" id="remu-d-frais-aide">Dépenses de l'activité, hors rémunération, 0 ou plus. Laissez vide s'il n'y en a pas.</p>
+              <input id="remu-d-frais" type="text" inputmode="decimal" autocomplete="off" aria-describedby="remu-d-frais-aide remu-d-frais-erreur" />
+              <p class="erreur" id="remu-d-frais-erreur" role="alert"></p>
+            </div>
+
+            <div class="champ">
+              <label for="remu-d-periodicite">Périodicité des frais</label>
+              <select id="remu-d-periodicite">
+                <option value="mois" selected>par mois</option>
+                <option value="an">par an</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit">Calculer</button>
+        </form>
+
+        <section id="remu-resultats" role="region" aria-label="Résultats de la rémunération" aria-live="polite" hidden>
+          <div data-resultats="a" class="lignes-versement" hidden>
+            <div data-ligne="sans-reserve">
+              <h2>Sans réserve</h2>
+              <dl>
+                <dt>Encore à verser</dt>
+                <dd id="remu-a-sans-encore"></dd>
+                <dt>Total de l'année</dt>
+                <dd id="remu-a-sans-total"></dd>
+              </dl>
+            </div>
+            <div data-ligne="avec-reserve">
+              <h2>Avec réserve</h2>
+              <dl>
+                <dt>Encore à verser</dt>
+                <dd id="remu-a-avec-encore"></dd>
+                <dt>Total de l'année</dt>
+                <dd id="remu-a-avec-total"></dd>
+              </dl>
+              <p class="message-resultat" id="remu-a-message"></p>
+            </div>
+          </div>
+
+          <div data-resultats="b" hidden>
+            <dl>
+              <dt>TJM à pratiquer</dt>
+              <dd id="remu-b-tjm"></dd>
+              <dt>Taux horaire à pratiquer</dt>
+              <dd id="remu-b-taux-horaire"></dd>
+            </dl>
+          </div>
+
+          <div data-resultats="c" hidden>
+            <dl>
+              <dt>Net mensuel</dt>
+              <dd id="remu-c-mensuel"></dd>
+              <dt>Net annuel</dt>
+              <dd id="remu-c-annuel"></dd>
+            </dl>
+            <p class="message-resultat" id="remu-c-message"></p>
+          </div>
+
+          <div data-resultats="d" hidden>
+            <dl>
+              <dt>Sortie mensuelle</dt>
+              <dd id="remu-d-sortie"></dd>
+              <dt>Durée sans rentrée</dt>
+              <dd id="remu-d-duree"></dd>
+            </dl>
+          </div>
+        </section>
+      </div>
     </main>
   </body>
 </html>

@@ -21,9 +21,9 @@ export const MESSAGES = {
 const ECRITURE_NOMBRE = /^-?\d+(?:[.,]\d+)?$/;
 
 // Les espaces (normales, insécables, fines) sont ignorées.
-const sansEspaces = (texte) => String(texte ?? '').replace(/\s+/g, '');
+export const sansEspaces = (texte) => String(texte ?? '').replace(/\s+/g, '');
 
-function nombreDeDecimales(texte) {
+export function nombreDeDecimales(texte) {
   const partie = sansEspaces(texte).split(/[.,]/)[1];
   return partie ? partie.length : 0;
 }
