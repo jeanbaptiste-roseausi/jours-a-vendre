@@ -42,7 +42,7 @@ L'ergonomie reste donc portée par `docs/interface.md`, par les exigences écrit
 
 ## Conséquences
 
-- **Installation une fois par poste** : l'entrée commitée active le skill mais ne le télécharge pas. Dans l'application de bureau, passer par **+**, puis **Add plugins**, et choisir le projet. Dans un terminal : `claude plugin install frontend-design@claude-plugins-official --scope project`.
+- **Installation une fois par poste** : l'entrée commitée active le skill mais ne le télécharge pas. Dans l'application de bureau, passer par **+**, puis **Add plugins**, et choisir le projet. Dans un terminal : `claude plugin install frontend-design@claude-plugins-official --scope project`. Si le poste n'a pas encore enregistré le catalogue officiel, cette commande échoue en disant que le skill est introuvable : lancer d'abord `claude plugin marketplace add anthropics/claude-plugins-official`, qui inscrit le catalogue dans les réglages personnels, hors du dépôt.
 - **Mises à jour automatiques** : le catalogue officiel se met à jour de lui-même. Contrairement à Playwright MCP et aux dépendances npm, ce skill n'est donc pas figé à une version, et Dependabot ne le surveille pas. Le risque est limité, puisqu'il ne contient que des consignes et que tests, relecture et recette restent en place.
 - **Sessions en ligne** : elles ne chargent pas les extensions activées par le dépôt. Le skill n'y est pas disponible.
 - **Dépendance** : il n'entre ni dans `package.json` ni dans l'appli publiée.
