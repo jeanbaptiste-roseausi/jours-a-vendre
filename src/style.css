@@ -31,8 +31,27 @@ h1 {
   font-size: 1.75rem;
 }
 
+.onglets {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.onglets button {
+  color: var(--accent);
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+}
+
+.onglets button[aria-selected='true'] {
+  color: #ffffff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
 form,
-#resultats {
+#resultats,
+#remu-resultats {
   background: var(--surface);
   border: 1px solid var(--bordure);
   border-radius: 0.5rem;
@@ -66,7 +85,8 @@ select {
   background: var(--surface);
 }
 
-#tarif {
+#tarif,
+#panneau-remuneration select {
   margin-top: 0.5rem;
 }
 
@@ -102,11 +122,13 @@ button {
   cursor: pointer;
 }
 
-#resultats {
+#resultats,
+#remu-resultats {
   margin-top: 1.5rem;
 }
 
-#resultats dl {
+#resultats dl,
+#remu-resultats dl {
   display: grid;
   grid-template-columns: auto auto;
   gap: 0.5rem 1.5rem;
@@ -114,20 +136,35 @@ button {
   margin: 0;
 }
 
-#resultats dt {
+#resultats dt,
+#remu-resultats dt {
   color: var(--texte-doux);
 }
 
-#resultats dd {
+#resultats dd,
+#remu-resultats dd {
   margin: 0;
   font-weight: 700;
 }
 
-#resultat-couvertes {
+#resultat-couvertes,
+.message-resultat {
   margin: 1rem 0 0;
   font-weight: 600;
 }
 
-#resultat-couvertes:empty {
+#resultat-couvertes:empty,
+.message-resultat:empty {
   display: none;
+}
+
+.lignes-versement {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1.5rem;
+}
+
+.lignes-versement h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
 }
